@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Búsqueda</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Resultados para "{{ query }}"</h1>
+        <ul>
+            {% for result in results %}
+            <li>
+                <strong>{{ result.filename }}</strong> - Score: {{ result.score }}
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="pagination">
+            {% if page > 1 %}
+            <form action="/search" method="POST" style="display:inline;">
+                <input type="hidden" name="query" value="{{ query }}">
+                <input type="hidden" name="page" value="{{ page-1 }}">
+                <input type="hidden" name="per_page" value="{{ per_page }}">
+                <button type="submit">Anterior</button>
+            </form>
+            {% endif %}
+            <span>Página {{ page }}</span>
+            {% if total_results > page * per_page %}
+            <form action="/search" method="POST" style="display:inline;">
+                <input type="hidden" name="query" value="{{ query }}">
+                <input type="hidden" name="page" value="{{ page+1 }}">
+                <input type="hidden" name="per_page" value="{{ per_page }}">
+                <button type="submit">Siguiente</button>
+            </form>
+            {% endif %}
+        </div>
+        <a href="/">Nueva Búsqueda</a>
+    </div>
+</body>
+</html>
